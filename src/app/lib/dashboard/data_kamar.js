@@ -12,6 +12,16 @@ export async function getKamar() {
     }
 }
 
+export async function getLatestKamar() {
+    try {
+        const { rows } = await pool.query("SELECT * FROM kamar ORDER BY nama_kamar DESC LIMIT 4");
+        return rows;
+    } catch (error) {
+        console.error("Error fetching latest kamars:", error);
+        throw error;
+    }
+}
+
 export async function getKamarById(id_kamar) {
     try {
         const { rows } = await pool.query("SELECT * FROM kamar WHERE id_kamar = $1", [id_kamar]);
