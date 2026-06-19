@@ -40,6 +40,16 @@ export default async function DetailKamarPage({ params }) {
         .filter(Boolean)
     : defaultFasilitas;
 
+  // Get index from 1 to 5 based on id_kamar hash for main image
+  const imageIndex = room.id_kamar
+    ? (room.id_kamar.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 5) + 1
+    : 1;
+
+  // Generate 4 other thumbnail indices
+  const thumbnails = [1, 2, 3, 4, 5]
+    .filter((idx) => idx !== imageIndex)
+    .slice(0, 4);
+
   return (
     <main className="max-w-7xl mx-auto px-6 py-8 flex-grow w-full">
       <Link
@@ -54,17 +64,24 @@ export default async function DetailKamarPage({ params }) {
         {/* Bagian Kiri: Visualisasi / Foto Kamar */}
         <div className="w-full lg:w-1/2 flex flex-col gap-4">
           {/* Foto Utama */}
-          <div className="w-full h-[400px] bg-slate-200 rounded-2xl flex items-center justify-center border border-slate-300">
-            <span className="text-slate-400 font-semibold text-lg">
-              Foto utama kamar
-            </span>
+          <div className="w-full h-[400px] bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 relative">
+            <img
+              src={`/image/img-kamar${imageIndex}.jpeg`}
+              alt={`Kamar ${room.nama_kamar}`}
+              className="w-full h-full object-cover"
+            />
           </div>
           {/* Thumbnail */}
           <div className="grid grid-cols-4 gap-4">
-            <div className="w-full h-24 bg-slate-200 rounded-xl border border-slate-300"></div>
-            <div className="w-full h-24 bg-slate-200 rounded-xl border border-slate-300"></div>
-            <div className="w-full h-24 bg-slate-200 rounded-xl border border-slate-300"></div>
-            <div className="w-full h-24 bg-slate-200 rounded-xl border border-slate-300"></div>
+            {thumbnails.map((idx) => (
+              <div key={idx} className="w-full h-24 bg-slate-100 rounded-xl overflow-hidden border border-slate-200 relative">
+                <img
+                  src={`/image/img-kamar${idx}.jpeg`}
+                  alt={`Kamar ${room.nama_kamar} thumbnail`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
           </div>
         </div>
 
